@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Énigme 1 — Les Runes des Elfes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-scene="foret">
+    <div id="stars"></div>
+    <div id="fireflies" aria-hidden="true"></div>
+
+    <header class="site-header compact">
+      <a class="back" href="index.html" aria-label="Retour">←</a>
+      <h1>Énigme 1 · Les runes des elfes</h1>
+    </header>
+
+    <main class="container">
+      <section class="card puzzle">
+        <div class="art wide">
+          <!-- Silhouette de forêt -->
+          <svg viewBox="0 0 560 200" role="img" aria-label="Forêt nocturne">
+            <defs>
+              <linearGradient id="skyF" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#14202b"/>
+                <stop offset="100%" stop-color="#0b141a"/>
+              </linearGradient>
+            </defs>
+            <rect width="560" height="200" fill="url(#skyF)"/>
+            <g fill="#11281f">
+              <path d="M0 160 C80 140 140 180 220 160 C300 140 380 180 460 160 C520 150 540 170 560 168 L560 200 L0 200 Z"/>
+            </g>
+            <g fill="#0b1a14" opacity="0.9">
+              <path d="M60 160 l-8 36 h16z"/>
+              <path d="M120 160 l-8 36 h16z"/>
+              <path d="M320 160 l-8 36 h16z"/>
+              <path d="M420 160 l-8 36 h16z"/>
+            </g>
+          </svg>
+        </div>
+        <h2>Chuchotements des arbres</h2>
+        <p class="riddle">
+          "D'abord l'Est guide mon pas,<br/>
+          puis la Lueur éclaire la voie,<br/>
+          enfin la Forêt s'éveille de joie."
+        </p>
+        <p>Tape la bonne suite sur les arbres runiques pour réveiller les esprits.</p>
+
+        <div class="runes trees" id="runes"></div>
+
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+
+        <div class="cta-row hidden" id="next1">
+          <a class="btn btn-primary" href="clairiere.html">Avancer vers la clairière</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <small>Forêt des tomte</small>
+    </footer>
+
+    <script src="assets/main.js"></script>
+    <script>
+      // Énigme 1: Entrer "E", "L", "F" — arbres au lieu de pierres
+      const needed = ["E","L","F"]; let entered = [];
+      const runes = document.getElementById('runes');
+      const fb = document.getElementById('feedback');
+      const next = document.getElementById('next1');
+
+      // Construire dynamiquement 6 arbres-runes et mélanger pour éviter E-L-F en ordre
+      const letters = ["E","L","F","A","N","T"];
+      function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
+      function elfInOrder(a){ const p = {E:a.indexOf('E'), L:a.indexOf('L'), F:a.indexOf('F')}; return p.E < p.L && p.L < p.F; }
+
+      let order = shuffle(letters.slice());
+      if (elfInOrder(order)) { // casse l'ordre si aligné
+        [order[0], order[order.length-1]] = [order[order.length-1], order[0]];
+        if (elfInOrder(order)) order.reverse();
+      }
+
+      function treeSVG(){
+        return `
+          <svg viewBox="0 0 60 60" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="canopy" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3d7d5f"/>
+                <stop offset="100%" stop-color="#1f3e32"/>
+              </linearGradient>
+            </defs>
+            <polygon points="30,6 12,28 22,28 8,44 24,40 16,54 30,48 44,54 36,40 52,44 38,28 48,28" fill="url(#canopy)"/>
+            <rect x="27" y="40" width="6" height="12" rx="1" fill="#6e4e33"/>
+          </svg>`;
+      }
+
+      const frag = document.createDocumentFragment();
+      order.forEach(ch => {
+        const b = document.createElement('button');
+        b.className = 'rune tree';
+        b.dataset.letter = ch;
+        b.setAttribute('aria-label', `Arbre ${ch}`);
+        b.innerHTML = `<span class="tree-ico">${treeSVG()}</span><span class="letter">${ch}</span>`;
+        frag.appendChild(b);
+      });
+      runes.appendChild(frag);
+
+      function resetWithShake() {
+        runes.classList.remove('shake'); void runes.offsetWidth; // reflow
+        runes.classList.add('shake');
+        entered = [];
+        fb.textContent = "Hmm… la forêt reste silencieuse.";
+      }
+
+      runes.addEventListener('click', (e) => {
+        const b = e.target.closest('button.rune');
+        if (!b) return;
+        const letter = b.dataset.letter;
+        b.classList.add('active');
+        setTimeout(()=>b.classList.remove('active'), 180);
+        entered.push(letter);
+        fb.textContent = `Tu as touché: ${entered.join('·')}`;
+        if (entered.length === needed.length) {
+          const ok = needed.every((v,i)=>v===entered[i]);
+          if (ok) {
+            fb.textContent = "Les esprits s'éveillent… Bien joué !";
+            document.body.classList.add('solved');
+            try { localStorage.setItem('puzzle1','true'); localStorage.setItem('progress','1'); } catch {}
+            next.classList.remove('hidden');
+            celebrate('foret');
+          } else {
+            resetWithShake();
+          }
+        }
+      });
+    </script>
+  </body>
+  </html>

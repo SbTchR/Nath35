@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Énigme 3 — Les Pierres du Ruisseau</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-scene="ruisseau">
+    <div id="stars"></div>
+    <div id="fireflies" aria-hidden="true"></div>
+
+    <header class="site-header compact">
+      <a class="back" href="clairiere.html" aria-label="Retour">←</a>
+      <h1>Énigme 3 · Les pierres du ruisseau</h1>
+    </header>
+
+    <main class="container">
+      <section class="card puzzle">
+        <div class="art wide">
+          <!-- Ruisseau stylisé -->
+          <svg viewBox="0 0 560 200" role="img" aria-label="Ruisseau sous la lune">
+            <defs>
+              <linearGradient id="skyR" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#122432"/>
+                <stop offset="100%" stop-color="#0a151c"/>
+              </linearGradient>
+              <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#0d3b4a"/>
+                <stop offset="100%" stop-color="#0a2f3b"/>
+              </linearGradient>
+            </defs>
+            <rect width="560" height="200" fill="url(#skyR)"/>
+            <path d="M0 140 C140 120 220 200 360 160 C440 140 480 160 560 180 L560 200 L0 200 Z" fill="url(#water)"/>
+            <g fill="#1c404d" opacity="0.7">
+              <ellipse cx="120" cy="160" rx="36" ry="10"/>
+              <ellipse cx="240" cy="150" rx="42" ry="12"/>
+              <ellipse cx="340" cy="165" rx="38" ry="11"/>
+              <ellipse cx="430" cy="155" rx="40" ry="11"/>
+              <ellipse cx="500" cy="170" rx="34" ry="10"/>
+            </g>
+          </svg>
+        </div>
+        <h2>Les pierres murmurent</h2>
+        <p class="riddle">
+          <em>
+            Tapis sous la mousse, cinq pierres gravées,<br/>
+            Ondes et étoiles s'y sont reflétées;<br/>
+            Mêle leurs voix, lis leur secret,<br/>
+            Touche-les bien, sans te presser;<br/>
+            En leur ordre vrai, tu passeras le gué.
+          </em>
+        </p>
+
+        <p>Fais tourner les pierres pour former le mot secret.</p>
+
+        <div class="dials" id="dials" role="group" aria-label="Pierres runiques">
+          <button class="dial" data-index="0" aria-label="Pierre 1">A</button>
+          <button class="dial" data-index="1" aria-label="Pierre 2">A</button>
+          <button class="dial" data-index="2" aria-label="Pierre 3">A</button>
+          <button class="dial" data-index="3" aria-label="Pierre 4">A</button>
+          <button class="dial" data-index="4" aria-label="Pierre 5">A</button>
+        </div>
+
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+
+        <div class="cta-row hidden" id="next3">
+          <a class="btn btn-primary" href="sanctuaire.html">Atteindre le sanctuaire</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <small>Ruisseau des elfes</small>
+    </footer>
+
+    <script src="assets/main.js"></script>
+    <script>
+      const alphabet = ['A','E','I','M','O','R','S','T','U','Y'];
+      const goal = ['T','O','M','T','E'];
+      const fb = document.getElementById('feedback');
+      const next = document.getElementById('next3');
+      const dials = Array.from(document.querySelectorAll('.dial'));
+
+      // init random letters ensuring goal letters are present in alphabet
+      dials.forEach((b,i)=>{
+        const start = alphabet[(Math.random()*alphabet.length)|0];
+        b.textContent = start;
+      });
+
+      function current(){ return dials.map(b=>b.textContent); }
+      function check(){
+        const ok = current().every((ch,i)=>ch===goal[i]);
+        if (ok) {
+          fb.textContent = "Le gué s'illumine… Bravo !";
+          document.body.classList.add('solved');
+          try { localStorage.setItem('puzzle3','true'); localStorage.setItem('progress','3'); } catch {}
+          next.classList.remove('hidden');
+          celebrate('ruisseau');
+        } else {
+          fb.textContent = current().join('');
+        }
+      }
+
+      document.getElementById('dials').addEventListener('click', (e)=>{
+        const b = e.target.closest('.dial');
+        if (!b) return;
+        const cur = b.textContent;
+        const idx = alphabet.indexOf(cur);
+        const nextI = (idx+1) % alphabet.length;
+        b.textContent = alphabet[nextI];
+        b.classList.add('active'); setTimeout(()=>b.classList.remove('active'), 120);
+        check();
+      });
+
+      check();
+    </script>
+  </body>
+  </html>
+

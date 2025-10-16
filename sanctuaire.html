@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sanctuaire — Joyeux Anniversaire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-scene="sanctuaire">
+    <div id="stars"></div>
+    <div id="fireflies" aria-hidden="true"></div>
+
+    <header class="site-header compact">
+      <a class="back" href="ruisseau.html" aria-label="Retour">←</a>
+      <h1>Sanctuaire des esprits</h1>
+    </header>
+
+    <main class="container">
+      <section class="card final">
+        <div class="art wide">
+          <!-- Cercle de pierres -->
+          <svg viewBox="0 0 560 200" role="img" aria-label="Cercle de pierres">
+            <defs>
+              <linearGradient id="skyS" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#101d28"/>
+                <stop offset="100%" stop-color="#081218"/>
+              </linearGradient>
+            </defs>
+            <rect width="560" height="200" fill="url(#skyS)"/>
+            <g fill="#142c24">
+              <ellipse cx="280" cy="172" rx="250" ry="28"/>
+            </g>
+            <g fill="#284d40">
+              <rect x="150" y="120" width="20" height="52" rx="3"/>
+              <rect x="220" y="110" width="20" height="62" rx="3"/>
+              <rect x="280" y="118" width="20" height="54" rx="3"/>
+              <rect x="340" y="112" width="20" height="60" rx="3"/>
+              <rect x="410" y="122" width="20" height="50" rx="3"/>
+            </g>
+          </svg>
+        </div>
+        <h2>Joyeux 35e anniversaire, ma chérie</h2>
+        <p>
+          Tu as traversé la forêt, dansé avec les lunes et fait chanter les pierres. Au cœur du sanctuaire, tu peux enfin lire ta "carte" d'anniversaire:
+        </p>
+        <blockquote class="message">
+          Je te souhaite une très belle journée d'anniversaire, tout plein de bonheur, d'aventures, et de petits moments magiques. 
+          <br>Merci d'être toi. Je t'aime fort.
+         <br>Ton futur mari ❤️
+          </blockquote>
+
+        <div class="cta-row">
+          <button class="btn" id="confettiBtn">Voir un bouquet d'étoiles ✨</button>
+          <a class="btn btn-subtle" href="index.html">Recommencer l'aventure</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <small>Avec tout mon amour ❤️</small>
+    </footer>
+
+    <script src="assets/main.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', ()=>{
+        celebrate('sanctuaire', {count: 80, life: 2000});
+        const btn = document.getElementById('confettiBtn');
+        btn.addEventListener('click', ()=> celebrate('sanctuaire', {count: 120, life: 2500}));
+      });
+    </script>
+  </body>
+  </html>
+

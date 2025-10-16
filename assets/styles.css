@@ -1,0 +1,128 @@
+/* Palette et variables */
+:root {
+  --bg-deep: #0a1519;
+  --bg-card: rgba(16, 31, 35, 0.72);
+  --bg-card-strong: rgba(10, 22, 24, 0.85);
+  --border-soft: rgba(255,255,255,0.08);
+  --text: #e8f3ef;
+  --text-dim: #b9cbc6;
+  --accent: #79d2b8;
+  --accent-2: #ffdca8;
+  --error: #ff7f7f;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: 'Nunito', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: radial-gradient(1200px 600px at 50% -10%, #15242d 0%, #0b161b 70%, #071015 100%);
+  overflow-x: hidden;
+}
+
+body[data-scene="intro"] { background: radial-gradient(1200px 600px at 50% -10%, #182833 0%, #0b171d 70%, #081217 100%); }
+body[data-scene="foret"] { background: radial-gradient(1200px 600px at 50% -10%, #142b26 0%, #0a1a17 70%, #071410 100%); }
+body[data-scene="clairiere"] { background: radial-gradient(1200px 600px at 50% -10%, #1a2a3b 0%, #0b1621 70%, #08131a 100%); }
+body[data-scene="ruisseau"] { background: radial-gradient(1200px 600px at 50% -10%, #102733 0%, #0a171d 70%, #071117 100%); }
+body[data-scene="sanctuaire"] { background: radial-gradient(1200px 600px at 50% -10%, #0f2028 0%, #0a151a 70%, #070f13 100%); }
+
+#stars, #fireflies, .particles { position: fixed; inset: 0; pointer-events: none; }
+#stars { z-index: 0; }
+#fireflies { z-index: 1; }
+.particles { z-index: 1000; }
+
+.site-header {
+  position: relative; z-index: 10;
+  padding: 20px 16px 0; text-align: center;
+}
+.site-header.compact { text-align: left; display: flex; gap: 12px; align-items: center; }
+.site-header .back { color: var(--text); text-decoration: none; font-size: 20px; opacity: 0.85; }
+.site-header h1 { font-family: 'Marcellus', Georgia, serif; font-weight: 400; letter-spacing: 0.5px; margin: 0 0 8px; }
+.subtitle { color: var(--text-dim); margin-top: 2px; }
+
+.container { position: relative; z-index: 5; padding: 20px 16px 80px; }
+.card {
+  max-width: 720px; margin: 12px auto; padding: 16px 16px 22px;
+  background: var(--bg-card); border: 1px solid var(--border-soft);
+  border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+}
+.card.final { text-align: center; }
+.card .art { border-radius: 12px; overflow: hidden; margin: -8px -8px 8px; border: 1px solid var(--border-soft); }
+.card .art.wide svg { width: 100%; height: auto; display: block; }
+.card h2 { font-family: 'Marcellus', Georgia, serif; font-weight: 400; margin: 8px 8px 10px; }
+.card p { color: var(--text); margin: 8px 8px; line-height: 1.55; }
+.card .riddle { color: var(--text-dim); font-style: italic; }
+.card .message { margin: 8px 8px; padding: 12px 14px; background: var(--bg-card-strong); border-radius: 12px; border: 1px dashed var(--border-soft); }
+
+.cta-row { display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+.cta-row.hidden { display: none; }
+.btn { appearance: none; border: 1px solid var(--border-soft); background: rgba(255,255,255,0.06); color: var(--text);
+  padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 700; }
+.btn:hover { background: rgba(255,255,255,0.1); }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: linear-gradient(180deg, var(--accent) 0%, #58b59d 100%); color: #0b1512; border-color: transparent; }
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-subtle { opacity: 0.9; }
+
+.site-footer { text-align: center; color: var(--text-dim); padding: 0 16px 24px; }
+
+/* Puzzle 1: runes */
+.runes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 10px 4px 0; }
+.rune { aspect-ratio: 1/1; border-radius: 16px; border: 1px solid var(--border-soft); 
+  color: #f4f0e6; font-size: 22px; font-weight: 800; letter-spacing: 2px; text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+  box-shadow: inset 0 -6px 16px rgba(0,0,0,0.35), 0 6px 12px rgba(0,0,0,0.25); background: radial-gradient(circle at 30% 30%, #2c3f38, #172522 70%);
+}
+.rune.tree { position: relative; background: radial-gradient(circle at 45% 30%, #2e523f, #163127 70%); overflow: hidden; }
+.rune.tree .tree-ico { position: absolute; inset: 12% 18% 30% 18%; opacity: 0.95; pointer-events: none; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.35)); }
+.rune.tree .tree-ico svg { width: 100%; height: 100%; display: block; }
+.rune.tree .letter { position: absolute; left: 50%; bottom: 10%; transform: translateX(-50%); font-size: 18px; }
+.rune.active { transform: scale(0.97); filter: brightness(1.2); }
+.runes.shake { animation: shake 400ms; }
+@keyframes shake { 10%{transform:translateX(-3px)} 20%{transform:translateX(3px)} 30%{transform:translateX(-2px)} 40%{transform:translateX(2px)} }
+
+.feedback { text-align: center; color: var(--text-dim); margin-top: 10px; min-height: 20px; }
+body.solved .card { box-shadow: 0 0 0 2px rgba(121,210,184,0.25), 0 12px 44px rgba(0,0,0,0.45); }
+
+/* Puzzle 2: sliders + moons */
+.sliders { display: grid; gap: 12px; margin: 8px 8px; }
+.slider-group { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
+.slider-group label { color: var(--text); }
+.moon { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border-soft); background: radial-gradient(circle at 50% 50%, #fff8dc 35%, #d0c9b0 36%, #2a2a2a 70%); }
+
+/* range input styling (webkit mainly) */
+input[type="range"] { -webkit-appearance: none; width: 100%; height: 24px; background: transparent; }
+input[type="range"]:focus { outline: none; }
+input[type="range"]::-webkit-slider-runnable-track { height: 10px; background: linear-gradient(90deg, #1d3a31, #345e50); border-radius: 12px; border: 1px solid var(--border-soft); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); border: none; margin-top: -5px; box-shadow: 0 1px 3px rgba(0,0,0,0.35); }
+input[type="range"]::-moz-range-track { height: 10px; background: linear-gradient(90deg, #1d3a31, #345e50); border-radius: 12px; border: 1px solid var(--border-soft); }
+input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); border: none; }
+
+/* Puzzle 3: dials */
+.dials { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 10px 8px 0; }
+.dial { aspect-ratio: 1/1; border-radius: 50%; border: 1px solid var(--border-soft); background: radial-gradient(60% 60% at 40% 35%, #3a5349, #1a2c26 70%);
+  color: #f4f0e6; font-weight: 900; font-size: 22px; letter-spacing: 2px; text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+  box-shadow: inset 0 -8px 20px rgba(0,0,0,0.35), 0 6px 12px rgba(0,0,0,0.25); }
+.dial.active { transform: scale(0.97); filter: brightness(1.15); }
+
+/* Stars, fireflies, confetti */
+.star { position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%; opacity: 0.9; }
+.firefly { position: absolute; width: 6px; height: 6px; background: radial-gradient(circle, var(--accent-2) 40%, rgba(255,220,168,0.6) 60%, rgba(255,220,168,0) 70%);
+  border-radius: 50%; opacity: 0.8; filter: blur(0.2px); animation: drift 12s linear infinite, glow 1.8s ease-in-out infinite; }
+@keyframes drift { from { transform: translate3d(0,0,0);} to { transform: translate3d(var(--dx,120px), var(--dy,-80px), 0);} }
+@keyframes glow { 0%,100% { opacity: 0.5; } 50% { opacity: 0.9; filter: brightness(1.4); } }
+
+.particle { position: absolute; width: 10px; height: 10px; transform: translate3d(0,0,0); }
+.particle .shape { width: 100%; height: 100%; display: block; }
+.p-heart { color: #ff8fb7; }
+.p-leaf { color: #9ed3b8; }
+.p-star { color: #ffdca8; }
+
+/* Utilities */
+.hidden { display: none !important; }
+
+@media (min-width: 720px) {
+  .card { padding: 18px 20px 24px; }
+  .runes { grid-template-columns: repeat(6, 1fr); }
+}
