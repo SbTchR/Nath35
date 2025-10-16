@@ -126,3 +126,22 @@ input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius
   .card { padding: 18px 20px 24px; }
   .runes { grid-template-columns: repeat(6, 1fr); }
 }
+
+/* Sanctuaire: typographie et mise en valeur du message final */
+body[data-scene="sanctuaire"] .final h2 {
+  font-size: 1.6rem;
+  letter-spacing: 0.4px;
+}
+body[data-scene="sanctuaire"] .final .message {
+  font-family: 'Parisienne', 'Marcellus', Georgia, serif;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: #fff3da;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+  border-style: solid;
+  border-color: rgba(255,220,168,0.15);
+}
+@media (min-width: 720px) {
+  body[data-scene="sanctuaire"] .final h2 { font-size: 1.9rem; }
+  body[data-scene="sanctuaire"] .final .message { font-size: 1.7rem; }
+}
